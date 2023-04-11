@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5865e298c56eaf021d65b8289fe66637",
+    "content-hash": "1c6ad83c5cd57e7c78ea87c5d9e4a783",
     "packages": [
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -6539,6 +6539,75 @@
                 "source": "https://github.com/Jean85/pretty-package-versions/tree/2.0.5"
             },
             "time": "2021-10-08T21:21:46+00:00"
+        },
+        {
+            "name": "laradumps/laradumps",
+            "version": "v1.9.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laradumps/laradumps.git",
+                "reference": "0db48329b4df6a4a6533365c49380ad01cd39be9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laradumps/laradumps/zipball/0db48329b4df6a4a6533365c49380ad01cd39be9",
+                "reference": "0db48329b4df6a4a6533365c49380ad01cd39be9",
+                "shasum": ""
+            },
+            "require": {
+                "nunomaduro/termwind": "^1.12",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.8",
+                "illuminate/console": "^8.18 | ^9.0",
+                "illuminate/mail": "^8.18 | ^9.0",
+                "illuminate/support": "^8.18 | ^9.0",
+                "nunomaduro/larastan": "^1.0 | ^2.1",
+                "orchestra/testbench": "^6.17 | ^7.0",
+                "pestphp/pest": "^1.21",
+                "symfony/var-dumper": "^5.4 | ^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaraDumps\\LaraDumps\\LaraDumpsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "LaraDumps\\LaraDumps\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Luan Freitas",
+                    "email": "luanfreitas10@protonmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Dump Component for Laravel.",
+            "homepage": "https://github.com/laradumps/laradumps",
+            "support": {
+                "issues": "https://github.com/laradumps/laradumps/issues",
+                "source": "https://github.com/laradumps/laradumps/tree/v1.9.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/luanfreitasdev",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-03-02T20:57:40+00:00"
         },
         {
             "name": "laravel/breeze",
