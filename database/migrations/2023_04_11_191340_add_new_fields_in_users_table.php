@@ -30,6 +30,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', static function (Blueprint $table) {
+            $table->dropColumn('document');
+            $table->dropColumn('phone');
             $table->dropColumn('zipCode');
             $table->dropColumn('state');
             $table->dropColumn('city');
