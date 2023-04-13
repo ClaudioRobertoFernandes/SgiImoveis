@@ -3,6 +3,11 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
+                <div class="flex pe-20 pe-sm-20 pe-lg-20 pe-xl-20 pe-xxl-20">
+                    <x-dynamic-component @click="mode='light'" x-show="mode ==='dark'" component="heroicon-s-sun" class="w-7 text-white cursor-pointer"></x-dynamic-component>
+                    <x-dynamic-component @click="mode='dark'" x-show="mode ==='light'" component="heroicon-s-moon" class="w-7 text-gray-800 cursor-pointer"></x-dynamic-component>
+
+                </div>
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">

@@ -12,10 +12,8 @@
         <style>[x-cloak] { display: none !important; }</style>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
-        @livewireScripts
-        @stack('scripts')
     </head>
-    <body class="font-sans antialiased">
+    <body x-data="{ mode: 'dark' }" :class="mode=== 'dark' ? 'dark bg-gray-800' : 'light bg-white'" class="font-sans">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             @include('layouts.navigation')
 
@@ -35,5 +33,7 @@
         </div>
 
         @livewire('notifications')
+        @livewireScripts
+        @stack('scripts')
     </body>
 </html>
