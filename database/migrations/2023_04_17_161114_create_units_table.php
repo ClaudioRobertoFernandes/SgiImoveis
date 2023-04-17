@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('city')->comment('City of the unit');
             $table->string('neighborhood')->comment('Neighborhood of the unit');
             $table->string('street')->comment('Street of the unit');
-            $table->string('number')->comment('Number of the unit');
-            $table->string('complement')->nullable()->comment('Complement of the unit');
+            $table->string('number')->default('S/N')->comment('Number of the unit');
+            $table->string('complement')->default('S/C')->comment('Complement of the unit');
             $table->boolean('active')->default(true)->comment('Unit is active?');
             $table->boolean('empty')->default(true)->comment('Unit is empty?');
             $table->timestamps();
