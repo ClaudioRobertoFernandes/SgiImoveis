@@ -14,6 +14,10 @@ class UserTypesSeeder extends Seeder
     {
         DB::table('user_types')->insert([
             [
+                'name'=> 'Master',
+                'description'=> 'Admin geral do sistema',
+            ],
+            [
                 'name'=> 'Proprietário',
                 'description'=> 'Proprietario do imóvel',
             ],

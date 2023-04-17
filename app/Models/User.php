@@ -57,4 +57,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(User_types::class);
     }
+
+    public static function getMaster(int $idUser): bool
+    {
+        $master = self::select('user_type_id')->where('id', $idUser)->first();
+
+        if ($master->user_type_id === 1) {
+            return true;
+        }
+
+        return false;
+    }
 }

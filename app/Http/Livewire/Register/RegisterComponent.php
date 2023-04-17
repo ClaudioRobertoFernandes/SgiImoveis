@@ -64,7 +64,7 @@ class RegisterComponent extends Component implements Forms\Contracts\HasForms
                                 TextInput::make('name')
                                     ->label('Nome completo')
                                     ->required()
-                                    ->rule('min:5')
+                                    ->rule('min:3')
                                     ->columnSpanFull()
                                     ->validationAttribute('Nome completo')
                                 ->columnSpanFull(),
@@ -90,22 +90,25 @@ class RegisterComponent extends Component implements Forms\Contracts\HasForms
                                 Select::make('permissions')
                                     ->label('Tipo de usuário')
                                     ->placeholder('Selecione o tipo de usuário')
-                                    ->options(User_types::all()->pluck('name', 'id'))
+                                    ->options(
+                                        User_types::getPermitionType()
+                                    )
                                     ->required()
                                     ->validationAttribute('Tipo de usuário'),
 
-                                TextInput::make('password')
-                                    ->label('Senha')
-                                    ->type('password')
-                                    ->required()
-                                    ->validationAttribute('Senha'),
-
-                                TextInput::make('password_confirmation')
-                                    ->label('Confirmar senha')
-                                    ->type('password')
-                                    ->required()
-                                    ->validationAttribute('Confirmação de senha'),
-                            ])
+//                                TextInput::make('password')
+//                                    ->label('Senha')
+//                                    ->type('password')
+//                                    ->required()
+//                                    ->validationAttribute('Senha'),
+//
+//                                TextInput::make('password_confirmation')
+//                                    ->label('Confirmar senha')
+//                                    ->type('password')
+//                                    ->required()
+//                                    ->validationAttribute('Confirmação de senha'),
+                            ]
+                        )
                     ->columns(2),
 
                     Step::make('Endereço')
@@ -196,7 +199,7 @@ class RegisterComponent extends Component implements Forms\Contracts\HasForms
         $user->user_type_id = $this->permissions;
         $user->document = $this->document;
         $user->phone = $this->phone;
-        $user->password = bcrypt($this->password);
+        $user->password = bcrypt('password');// password
         $user->zipCode = $this->zipCode;
         $user->street = $this->street;
         $user->number = ($this->number) ?? 'S/N';
