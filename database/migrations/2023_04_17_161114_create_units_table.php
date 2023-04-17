@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('owner_id')->comment('Owner of the unit')->nullable()->constrained('users');
             $table->foreignId('tenant_id')->comment('Tenant of the unit')->nullable()->constrained('users');
+            $table->foreignId('building_id')->comment('Building of the unit')->nullable()->constrained('users');
             $table->string('name')->comment('Name of the unit');
+            $table->string('block')->nullable()->comment('Block of the unit');
             $table->string('description')->nullable()->comment('Description of the unit');
             $table->string('zip_code')->comment('Zip code of the unit');
             $table->string('state')->comment('State of the unit');

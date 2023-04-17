@@ -37,8 +37,8 @@
                                 <x-dropdown-link :href="route('register-participants')" :active="request()->routeIs('register-participants')">
                                     {{ __('Usuário') }}
                                 </x-dropdown-link>
-                                <x-dropdown-link >
-                                    {{ __('Inquilino') }}
+                                <x-dropdown-link :href="route('register-units')" :active="request()->routeIs('register-units')">
+                                    {{ __('Unidades') }}
                                 </x-dropdown-link>
                                 <x-dropdown-link >
                                     {{ __('Imobiliaria') }}

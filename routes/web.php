@@ -1,11 +1,10 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Livewire\{
-    Dashboard\DashboardComponent,
+use App\Http\Livewire\{Dashboard\DashboardComponent,
     Register\RegisterComponent,
-    WelcomeComponent
-};
+    Register\RegisterUnitComponent,
+    WelcomeComponent};
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', WelcomeComponent::class)->name('welcome');
@@ -18,6 +17,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/register-participants', RegisterComponent::class)->name('register-participants');
     Route::get('/teste', RegisterComponent::class)->name('teste');
+    Route::get('register-units', RegisterUnitComponent::class)->name('register-units');
 });
 
 require __DIR__.'/auth.php';
