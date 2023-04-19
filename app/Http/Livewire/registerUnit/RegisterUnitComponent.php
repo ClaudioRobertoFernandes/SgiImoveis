@@ -1,19 +1,25 @@
 <?php
 
-namespace App\Http\Livewire\Register;
+namespace App\Http\Livewire\registerUnit;
 
+use App\Models\Building\Buildings;
+use App\Models\Units\Units;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TextInput\Mask;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
+use Filament\Notifications\Notification;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
@@ -22,6 +28,8 @@ class RegisterUnitComponent extends Component implements Forms\Contracts\HasForm
     use Forms\Concerns\InteractsWithForms;
 
     public $name;
+    public $block;
+    public $building_id;
     public $description;
     public $owner_id;
     public $zip_code;
@@ -33,37 +41,51 @@ class RegisterUnitComponent extends Component implements Forms\Contracts\HasForm
     public $state;
     public $active;
     public $empty;
+    public $search_tenant;
+    private array $data;
 
     public function render(): View|Application|Factory
     {
-        return view('livewire.register.register-unit-component');
+        return view('livewire.register-unit.register-unit-component');
     }
 
     protected function getFormSchema(): array
     {
         return [
-            Forms\Components\Wizard::make(
+            Wizard::make(
                 [
                     Step::make('Unidade')
                         ->schema(
                             [
-                                TextInput::make('name')
-                                    ->label('Unidade')
-                                    ->columnSpanFull(),
-
-                                TextInput::make('description')
-                                    ->label('Descrição')
-                                    ->columnSpanFull(),
-
                                 Select::make('owner_id')
                                     ->label('Proprietário')
                                     ->options([
                                         Auth::User()->id => Auth::User()->name,
                                     ])
-                                    ->default(Auth::User()->id)
-                                    ->disablePlaceholderSelection()
-                                    ->disabled()
                                     ->columnSpanFull(),
+
+                                Select::make('building_id')
+                                    ->label('Edifício')
+                                    ->options([
+                                        Buildings::getBuildings(Auth::User()->id),
+                                    ])
+                                    ->columnSpanFull()
+                                    ->helperText('Em caso de apartamento cadastre o edifício.'),
+
+                                TextInput::make('name')
+                                    ->label('Imóvel')
+                                    ->required()
+                                    ->columns(2),
+
+                                TextInput::make('block')
+                                    ->label('Bloco')
+                                    ->columns(2),
+
+                                Textarea::make('description')
+                                    ->label('Descrição')
+                                    ->rows(3)
+                                    ->columnSpanFull(),
+
                             ]
                         ),
                     Step::make('Localização')
@@ -116,25 +138,58 @@ class RegisterUnitComponent extends Component implements Forms\Contracts\HasForm
                                     ->numeric(),
 
                                 TextInput::make('complement')
-                                    ->label('Complemento'),
+                                    ->label('Complemento')
+                                    ->columnSpanFull(),
 
                                 Toggle::make('active')
                                     ->label('Ativo')
-                                    ->default(true),
+                                    ->onColor('success')
+                                    ->columns(2),
 
                                 Toggle::make('empty')
                                     ->label('Vazio')
-                                    ->default(true),
+                                    ->onColor('success')
+                                    ->columns(2),
                             ]
                         )
                 ])
-                ->extraAttributes(['class'=>'dark:text-white'])
+                ->columns(2)
+                ->extraAttributes(['class' => 'dark:text-white'])
+                ->submitAction(new HtmlString(view('livewire.register-unit.register-unit-component-submit')))
         ];
     }
+
 
     public function submit()
     {
 
         $this->data = $this->form->getState();
+
+        $unit = new Units();
+        $unit->building_id = $this->building_id;
+        $unit->name = $this->name;
+        $unit->block = $this->block;
+        $unit->description = $this->description;
+        $unit->owner_id = $this->owner_id;
+        $unit->zip_code = $this->zip_code;
+        $unit->street = $this->street;
+        $unit->number = $this->number ?? 'S/N';
+        $unit->complement = $this->complement ?? 'S/C';
+        $unit->neighborhood = $this->neighborhood;
+        $unit->city = $this->city;
+        $unit->state = $this->state;
+        $unit->active = $this->active ?? false;
+        $unit->empty = $this->empty ?? false;
+
+        if ($unit->save()) {
+
+            Notification::make()
+                ->title('Salvo com sucesso')
+                ->success()
+                ->duration(5000)
+                ->send();
+        }
+
+        return redirect()->route('register-units');
     }
 }

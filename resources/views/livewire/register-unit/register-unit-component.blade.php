@@ -10,7 +10,7 @@
         <!-- Author: FormBold Team -->
         <!-- Learn More: https://formbold.com -->
         <div class="mx-auto w-full max-w-[550px]">
-            <form wire:submit.prevent="submit">
+            <form>
                 @csrf
 
                 {{ $this->form }}
