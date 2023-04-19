@@ -2,23 +2,23 @@
 
 namespace App\Http\Livewire\Register;
 
-use App\Models\User;
-use App\Models\userTypes\User_types;
 use Filament\Forms;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\TextInput\Mask;
-use Filament\Forms\Components\Wizard;
-use Filament\Forms\Components\Wizard\Step;
-use Filament\Notifications\Notification;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\HtmlString;
-use Illuminate\Validation\ValidationException;
+use App\Models\User;
 use Livewire\Component;
+use Illuminate\Support\HtmlString;
+use Illuminate\Contracts\View\View;
+use App\Models\userTypes\User_types;
+use Illuminate\Support\Facades\Http;
+use Filament\Forms\Components\Wizard;
+use Filament\Forms\Components\Select;
+use Illuminate\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Wizard\Step;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\TextInput\Mask;
+use Illuminate\Validation\ValidationException;
 use Str;
 
 class RegisterComponent extends Component implements Forms\Contracts\HasForms
