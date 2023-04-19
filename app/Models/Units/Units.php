@@ -21,13 +21,13 @@ class Units extends Model
         'street',
         'number',
         'complement',
-        'active',
-        'empty',
 
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'active' => 'boolean',
+        'empty' => 'boolean',
     ];
 }
