@@ -35,7 +35,7 @@
 
                             <x-slot name="content">
                                 <x-dropdown-link :href="route('register-participants')" :active="request()->routeIs('register-participants')">
-                                    {{ __('Usuário') }}
+                                    {{ __('Usuários') }}
                                 </x-dropdown-link>
                                 <x-dropdown-link :href="route('register-units')" :active="request()->routeIs('register-units')">
                                     {{ __('Unidades') }}
@@ -140,7 +140,7 @@
 
                 <x-slot name="content">
                     <x-dropdown-link >
-                        {{ __('Usuário') }}
+                        {{ __('Usuários') }}
                     </x-dropdown-link>
                     <x-dropdown-link >
                         {{ __('Lançamento B') }}

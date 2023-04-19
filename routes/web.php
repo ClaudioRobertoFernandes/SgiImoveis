@@ -3,7 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Livewire\{Dashboard\DashboardComponent,
     Register\RegisterComponent,
-    Register\RegisterUnitComponent,
+    registerUnit\RegisterUnitComponent,
+    Unit\UnitComponent,
     WelcomeComponent};
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/register-participants', RegisterComponent::class)->name('register-participants');
     Route::get('/teste', RegisterComponent::class)->name('teste');
     Route::get('register-units', RegisterUnitComponent::class)->name('register-units');
+    Route::get('units',UnitComponent::class)->name('units');
 });
 
 require __DIR__.'/auth.php';
