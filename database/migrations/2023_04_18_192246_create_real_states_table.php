@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('real_states', static function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->comment('Id de identificação da imobiliaria')->constrained('users');
-            $table->foreignId('real_estate_belongs')->comment('Id de identificação do usuario ao qual aimobiliaria esta vinculado')->constrained('users');
             $table->integer('first_release')->default(1);
             $table->integer('recurrent_release')->default(1);
             $table->integer('entrance_fees')->default(1)->comment('Taxa de entrada');

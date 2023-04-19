@@ -7,7 +7,7 @@ use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\HtmlString;
 use Illuminate\Contracts\View\View;
-use App\Models\userTypes\User_types;
+use App\Models\UserTypes\UserTypes;
 use Illuminate\Support\Facades\Http;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Select;
@@ -91,7 +91,7 @@ class RegisterComponent extends Component implements Forms\Contracts\HasForms
                                     ->label('Tipo de usuário')
                                     ->placeholder('Selecione o tipo de usuário')
                                     ->options(
-                                        User_types::getPermitionType()
+                                        UserTypes::getPermitionType()
                                     )
                                     ->required()
                                     ->validationAttribute('Tipo de usuário'),
@@ -184,9 +184,10 @@ class RegisterComponent extends Component implements Forms\Contracts\HasForms
         $user = new User();
         $user->name = $this->name;
         $user->email = $this->email;
+        $user->belongs = User::getBelongsToUser();
         $user->user_type_id = $this->permissions;
-        $user->document = $this->document;
-        $user->phone = $this->phone;
+        $user->document = preg_replace("/\D/", "", $this->document);
+        $user->phone = preg_replace("/\D/", "", $this->phone);
         $user->password = bcrypt('password');// password
         $user->zipCode = $this->zipCode;
         $user->street = $this->street;

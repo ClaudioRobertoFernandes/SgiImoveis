@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\userTypes;
+namespace App\Models\UserTypes;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
-class User_types extends Model
+class UserTypes extends Model
 {
     use HasFactory;
 

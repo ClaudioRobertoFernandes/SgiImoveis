@@ -1,19 +1,24 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Factories\UserTypes;
 
 use App\Models\UserTypes\UserTypes;
-use DB;
-use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-class UserTypesSeeder extends Seeder
+/**
+ * @extends Factory<UserTypes>
+ */
+class UserTypesFactory extends Factory
 {
+    protected $model = UserTypes::class;
     /**
-     * Run the database seeds.
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
      */
-    public function run(): void
+    public function definition(): array
     {
-        DB::table('user_types')->insert([
+        return [
             [
                 'name'=> 'Master',
                 'description'=> 'Admin geral do sistema',
@@ -38,6 +43,6 @@ class UserTypesSeeder extends Seeder
                 'name'=> 'Contabilidade',
                 'description'=> 'Contabilidade orienta, controla e registra e administra um imóvel',
             ]
-        ]);
+        ];
     }
 }

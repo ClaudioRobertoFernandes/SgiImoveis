@@ -3,11 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\userTypes\User_types;
+use App\Models\UserTypes\UserTypes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -21,6 +22,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'belongs',
         'email',
         'password',
         'document',
@@ -55,17 +57,19 @@ class User extends Authenticatable
 
     public function userTypes(): HasOne
     {
-        return $this->hasOne(User_types::class);
+        return $this->hasOne(UserTypes::class);
     }
 
     public static function getMaster(int $idUser): bool
     {
         $master = self::select('user_type_id')->where('id', $idUser)->first();
 
-        if ($master->user_type_id === 1) {
-            return true;
-        }
+        return $master->user_type_id === 1;
+    }
 
-        return false;
+    public static function getBelongsToUser()
+    {
+
+        return Auth::user()->belongs ?? Auth::user()->id;
     }
 }
