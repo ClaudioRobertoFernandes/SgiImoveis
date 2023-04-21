@@ -3,30 +3,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/*.children {*/
-/*    background: rgba(225, 0, 0, 0.66);*/
-/*}*/
-
-.children a,
-.children .separator {
-    display: block;
-    /*margin: 5px 0px;*/
-    /*padding: 5px 10px;*/
-}
-
-/*.children .separator {*/
-/*    border-top-width: 2px;*/
-/*}*/
-
-/*.children a:hover {*/
-/*    color: #818cf8;*/
-/*}*/
-
-@media (min-width: 768px) {
-    .children {
-        position: absolute;
-        width: 155px;
-        top: 70px;
-    }
-}
