@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\Consts;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Filament\Notifications\Notification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,11 +28,39 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $permited = User::isPermited($request->email);
 
-        $request->session()->regenerate();
+        if ($permited['permited'] === 2) {
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+
+            $request->authenticate();
+
+            $request->session()->regenerate();
+
+            Auth::logoutOtherDevices($request->password);
+
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
+
+        if ($permited['permited'] === 1){
+
+            Notification::make()
+                ->title('Ação não permitida')
+                ->icon('heroicon-o-x-circle')
+                ->iconColor('danger')
+                ->send();
+        }
+
+        if ($permited['permited'] === 0){
+
+            Notification::make()
+                ->title('Usuário não cadastrado')
+                ->icon('heroicon-o-x-circle')
+                ->iconColor('danger')
+                ->send();
+        }
+
+        return redirect('login');
     }
 
     /**
@@ -43,6 +74,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('welcome');
     }
 }

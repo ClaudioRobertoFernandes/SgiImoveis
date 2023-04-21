@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
+use PharIo\Manifest\Email;
 
 class User extends Authenticatable
 {
@@ -71,5 +72,23 @@ class User extends Authenticatable
     {
 
         return Auth::user()->belongs ?? Auth::user()->id;
+    }
+
+    public static function isPermited(String $email)
+    {
+        $user = self::where('email', $email)->first();
+        if($user){
+            if ($user->user_type_id === 1 || $user->user_type_id === 2 || $user->user_type_id === 3 || $user->user_type_id === 4) {
+                return ['permited' => 2];
+            }
+
+            if($user->user_type_id === 5 || $user->user_type_id === 6) {
+                return ['permited' => 1];
+
+            }
+        }
+        else{
+            return ['permited' => 0];
+        }
     }
 }
