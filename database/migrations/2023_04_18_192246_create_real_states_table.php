@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('real_states', static function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->comment('Id de identificação da imobiliaria')->constrained('users');
-            $table->integer('first_release')->default(1);
-            $table->integer('recurrent_release')->default(1);
-            $table->integer('entrance_fees')->default(1)->comment('Taxa de entrada');
-            $table->integer('exit_fees')->default(1)->comment('Taxa de saída');
-            $table->integer('daily_interest')->default(1)->comment('Juros diario');
-            $table->integer('monthly_interest')->default(1)->comment('Juros mensal');
+            $table->integer('first_release')->default(0);
+            $table->integer('recurrent_release')->default(0);
+            $table->integer('entrance_fees')->default(0)->comment('Taxa de entrada');
+            $table->integer('exit_fees')->default(0)->comment('Taxa de saída');
+            $table->integer('daily_interest')->default(0)->comment('Juros diario');
+            $table->integer('monthly_interest')->default(0)->comment('Juros mensal');
             $table->timestamps();
         });
     }

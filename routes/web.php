@@ -2,13 +2,14 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Livewire\{Dashboard\DashboardComponent,
+    RealState\RealStateComponent,
     Register\RegisterComponent,
     registerUnit\RegisterUnitComponent,
     Unit\UnitComponent,
     WelcomeComponent};
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', WelcomeComponent::class)->name('welcome');
+Route::get('/welcome', WelcomeComponent::class)->name('welcome');
 
 
 Route::middleware('auth')->group(function () {
@@ -20,6 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/teste', RegisterComponent::class)->name('teste');
     Route::get('register-units', RegisterUnitComponent::class)->name('register-units');
     Route::get('units',UnitComponent::class)->name('units');
+    Route::get('real-states',RealStateComponent::class)->name('Imobiliarias');
 });
 
 require __DIR__.'/auth.php';
