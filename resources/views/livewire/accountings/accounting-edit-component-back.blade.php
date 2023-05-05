@@ -1,0 +1,9 @@
+<x-filament-support::button
+    size="sm"
+    type="button"
+    wire:click="back"
+    icon="heroicon-o-arrow-left"
+    icon-position="before"
+    class="my-4">
+    Voltar
+</x-filament-support::button>

@@ -43,7 +43,7 @@
                                 <x-dropdown-link :href="route('Imobiliarias')" :active="request()->routeIs('Imobiliarias')">
                                     {{ __('Imobiliaria') }}
                                 </x-dropdown-link>
-                                <x-dropdown-link >
+                                <x-dropdown-link :href="route('Contabilidades')" :active="request()->routeIs('Contabilidades')">
                                     {{ __('Contabilidade') }}
                                 </x-dropdown-link>
                             </x-slot>
@@ -148,8 +148,8 @@
                     <x-dropdown-link :href="route('Imobiliarias')" :active="request()->routeIs('Imobiliarias')">
                         {{ __('Imobiliaria') }}
                     </x-dropdown-link>
-                    <x-dropdown-link >
-                        {{ __('Lançamento C') }}
+                    <x-dropdown-link :href="route('Contabilidades')" :active="request()->routeIs('Contabilidades')">
+                        {{ __('Contabilidade') }}
                     </x-dropdown-link>
                 </x-slot>
             </x-dropdown>

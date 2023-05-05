@@ -1,8 +1,8 @@
-# Disable Directory listing
-Options -Indexes
+Options +SymLinksIfOwnerMatch
+RewriteEngine On
 
-# block files which needs to be hidden, specify .example extension of the file
-<Files ~ "\.(env|env.example|.editorconfig|composer.json|composer.lock|package.json|package-lock.json|xml|config.js|md|gitignore|.gitattributes|.styleci.yml|artisan)$">
-    Order allow,deny
-    Deny from all
-</Files>
+# Allow Installatron requests
+RewriteCond %{REQUEST_FILENAME} deleteme\.\w+\.php
+RewriteRule (.*) - [L]
+
+RewriteRule ^ index.php [L]

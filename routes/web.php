@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Livewire\{Dashboard\DashboardComponent,
+use App\Http\Livewire\{Accountings\AccountingComponent,
+    Accountings\AccountingEditComponent,
+    Dashboard\DashboardComponent,
     RealState\RealStateComponent,
     Register\RegisterComponent,
     registerUnit\RegisterUnitComponent,
@@ -20,8 +22,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/register-participants', RegisterComponent::class)->name('register-participants');
     Route::get('/teste', RegisterComponent::class)->name('teste');
     Route::get('register-units', RegisterUnitComponent::class)->name('register-units');
-    Route::get('units',UnitComponent::class)->name('units');
-    Route::get('real-states',RealStateComponent::class)->name('Imobiliarias');
+    Route::get('units', UnitComponent::class)->name('units');
+    Route::get('real-states', RealStateComponent::class)->name('Imobiliarias');
+    Route::get('accountings', AccountingComponent::class)->name('Contabilidades');
+    Route::get('accountings-edit/{userId}', AccountingEditComponent::class)->name('accountings-edit');
 });
 
 require __DIR__.'/auth.php';

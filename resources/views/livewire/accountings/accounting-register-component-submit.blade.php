@@ -1,9 +1,9 @@
 <x-filament-support::button
     size="sm"
     type="submit"
-    wire:click="submitAccounting"
+    wire:click="submit"
     icon="heroicon-o-check"
     icon-position="after"
     class="my-4">
-    Alterar
+    Cadastrar
 </x-filament-support::button>

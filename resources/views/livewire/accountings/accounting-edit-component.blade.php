@@ -8,8 +8,13 @@
     </x-slot>
 
     <div class="flex items-center justify-center p-12">
-        <h1 class="dark:text-white">
-            {{ $this->userId }}
-        </h1>
+        <div class="mx-auto w-full max-w-[550px]">
+            <form>
+            @csrf
+
+            {{ $this->form }}
+
+            </form>
+        </div>
     </div>
 </div>
