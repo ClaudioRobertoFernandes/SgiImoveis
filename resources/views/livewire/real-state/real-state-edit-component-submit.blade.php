@@ -1,0 +1,9 @@
+<x-filament-support::button
+    size="sm"
+    type="submit"
+    wire:click="update"
+    icon="heroicon-o-check"
+    icon-position="after"
+    class="my-4">
+    Alterar
+</x-filament-support::button>

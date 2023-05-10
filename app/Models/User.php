@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\UserTypes\UserTypes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -55,6 +56,13 @@ class User extends Authenticatable
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            get: static fn (string $value) => 'Meu nome: ' . strtoupper($value) . ' e tenho '. 35 . ' anos.',
+        );
+    }
 
     public function getDocumentAttribute($value): array|string
     {

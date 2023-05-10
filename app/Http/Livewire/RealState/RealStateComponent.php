@@ -2,26 +2,33 @@
 
 namespace App\Http\Livewire\RealState;
 
-use App\Helpers\Consts;
-use App\Models\RealStates\RealStates;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Wizard;
-use Filament\Forms\Components\Wizard\Step;
-use Filament\Notifications\Notification;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\HtmlString;
+use App\Models\User;
+use Filament\Tables;
+use App\Helpers\Consts;
 use Livewire\Component;
+use Illuminate\View\Factory;
+use Tables\Actions\DeleteAction;
+use Illuminate\Support\HtmlString;
+use Filament\Forms\Components\Grid;
+use Illuminate\Contracts\View\View;
+use App\Models\RealStates\RealStates;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Wizard;
+use Illuminate\Foundation\Application;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Wizard\Step;
+use Filament\Tables\Columns\CheckboxColumn;
 
-class RealStateComponent extends Component implements Forms\Contracts\HasForms
+class RealStateComponent extends Component implements Tables\Contracts\HasTable
 {
-    use Forms\Concerns\InteractsWithForms;
 
+    use Tables\Concerns\InteractsWithTable;
+
+    public $data;
     public $belongs;
     public $real_state;
     public $realState;
@@ -42,10 +49,7 @@ class RealStateComponent extends Component implements Forms\Contracts\HasForms
             ?->get();
     }
 
-    public function render(): View|Application|Factory
-    {
-        return view('livewire.real-state.real-state-component');
-    }
+
 
     protected function getFormSchema(): array
     {
@@ -149,5 +153,68 @@ class RealStateComponent extends Component implements Forms\Contracts\HasForms
         }
 
         return redirect()->route('Imobiliarias');
+    }
+
+    protected function getTableQuery(): Builder
+    {
+        return User::query()
+            ->where('user_type_id', Consts::USER_TYPE_REAL_STATE);
+    }
+
+    protected function getTableColumns(): array
+    {
+        return [
+            CheckboxColumn::make('user_id')
+                ->label('Id')
+                ->sortable(['id']),
+            TextColumn::make('name')
+                ->label('Nome')
+                ->sortable(['name'])
+                ->tooltip('Nome'),
+            TextColumn::make('email')->label('E-mail'),
+            TextColumn::make('document')->label('CPF/CNPJ'),
+            TextColumn::make('phone')->label('Telefone'),
+            TextColumn::make('zipCode')->label('CEP'),
+            TextColumn::make('created_at')
+                ->label('Cadastro')
+                ->date('d/m/Y')
+                ->color('danger'),
+        ];
+    }
+
+    protected function getTableFilters(): array
+    {
+        return [
+
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function getTableActions(): array
+    {
+        return [
+            Tables\Actions\ActionGroup::make([
+                // Tables\Actions\ViewAction::make()
+                //     ->extraAttributes(['class' => 'dark:text-white']),
+                Tables\Actions\EditAction::make()
+                    ->url(fn (User $record): string => route('real-states-edit', $record))
+                    ->extraAttributes(['class' => 'dark:text-white']),
+                Tables\Actions\DeleteAction::make()
+                    ->extraAttributes(['class' => 'dark:text-white']),
+            ]),
+
+        ];
+    }
+
+    protected function getTableBulkActions(): array
+    {
+        return [];
+    }
+
+    public function render(): View|Application|Factory
+    {
+        return view('livewire.real-state.real-state-component');
     }
 }
