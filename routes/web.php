@@ -36,10 +36,6 @@ Route::middleware('auth')->group(function () {
     Route::get('accountings', AccountingComponent::class)->name('Contabilidades');
     Route::get('accountings-edit/{userId}', AccountingEditComponent::class)->name('accountings-edit');
 
-    Route::get('/testes/{user}', static function (\App\Models\RealStates\RealStates $realState) {
-        return $realState->value_base;
-    })->name('testes');
-
 });
 
 require __DIR__.'/auth.php';

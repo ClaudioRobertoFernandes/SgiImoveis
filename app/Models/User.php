@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\RealStates\RealStates;
 use App\Models\UserTypes\UserTypes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -57,10 +58,15 @@ class User extends Authenticatable
         'updated_at' => 'datetime',
     ];
 
+    public function realStates(): HasOne
+    {
+        return $this->hasOne(RealStates::class);
+    }
+
     protected function name(): Attribute
     {
         return Attribute::make(
-            get: static fn (string $value) => 'Meu nome: ' . strtoupper($value) . ' e tenho '. 35 . ' anos.',
+            get: static fn(string $value) =>  strtoupper($value),
         );
     }
 
@@ -70,7 +76,7 @@ class User extends Authenticatable
         $str = preg_replace('/(\D)/', '', $value);
         if (strlen($str) === 11) {
             $document = preg_replace('/(\d{3})(\d{3})(\d{3})(\d{2})/', '$1.$2.$3-$4', $str);
-        }else {
+        } else {
             $document = preg_replace('/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/', '$1.$2.$3/$4-$5', $str);
         }
         return $document;
@@ -78,11 +84,15 @@ class User extends Authenticatable
 
     public function getPhoneAttribute($value): array|string|null
     {
-        return preg_replace('/^(?:(?:\+|00)?(55)\s?)?(?:\(?(\d\d)\)?\s?)?(?:((?:9\d|\d)\d{3})\-?(\d{4}))$/','$1 ($2) $3-$4', $value , );
+        return preg_replace(
+            '/^(?:(?:\+|00)?(55)\s?)?(?:\(?(\d\d)\)?\s?)?(?:((?:9\d|\d)\d{3})\-?(\d{4}))$/',
+            '$1 ($2) $3-$4', $value
+        );
     }
-    public function getzipCodeAttribute($value): array|string|null
+
+    public function getZipCodeAttribute($value): array|string|null
     {
-        return preg_replace('/^(\d{2})\.?(\d{3})\-?(\d{3})/','$1.$2-$3', $value);
+        return preg_replace('/^(\d{2})\.?(\d{3})\-?(\d{3})/', '$1.$2-$3', $value);
     }
 
     public function getNumberAttribute($value)
@@ -92,7 +102,7 @@ class User extends Authenticatable
 
     public function setNumberAttribute($value): string
     {
-        if($value === null || $value === ''){
+        if ($value === null || $value === '') {
             return $this->attributes['number'] = 'S/N';
         }
 
@@ -106,12 +116,13 @@ class User extends Authenticatable
 
     public function setComplementAttribute($value): string
     {
-        if($value === null || $value === ''){
+        if ($value === null || $value === '') {
             return $this->attributes['complement'] = 'S/C';
         }
 
         return $this->attributes['complement'] = $value;
     }
+
     public function userTypes(): HasOne
     {
         return $this->hasOne(UserTypes::class);
@@ -130,20 +141,24 @@ class User extends Authenticatable
         return Auth::user()->belongs ?? Auth::user()->id;
     }
 
-    public static function isPermited(String $email)
+    public static function isPermited(string $email)
     {
         $user = self::where('email', $email)->first();
-        if($user){
-            if ($user->user_type_id === 1 || $user->user_type_id === 2 || $user->user_type_id === 3 || $user->user_type_id === 4) {
+        if ($user) {
+            if (
+                ($user->user_type_id === 1) ||
+                ($user->user_type_id === 2) ||
+                ($user->user_type_id === 3) ||
+                ($user->user_type_id === 4))
+            {
                 return ['permited' => 2];
             }
 
-            if($user->user_type_id === 5 || $user->user_type_id === 6) {
+            if ($user->user_type_id === 5 || $user->user_type_id === 6) {
                 return ['permited' => 1];
 
             }
-        }
-        else{
+        } else {
             return ['permited' => 0];
         }
     }

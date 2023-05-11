@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\RealState;
 
+use App\Helpers\Consts;
 use App\Models\RealStates\RealStates;
 use App\Models\User;
 use Filament\Forms;
@@ -17,7 +18,8 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
 
     use Forms\Concerns\InteractsWithForms;
 
-    public $realState;
+    public $realStates;
+    public $user;
     public $data;
     public string $name;
     public string $email;
@@ -30,7 +32,7 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
     public string $number;
     public string $complement;
     public string $document;
-    public int $value_base = 0;
+    public  $value_base = 0;
     public int $first_release;
     public int $recurrent_release;
     public int $entrance_fees;
@@ -41,33 +43,34 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
 
     public function mount($userId): void
     {
-        $this->realState = User::where('users.id', $userId)
+        $this->user = User::where('users.belongs', $userId)
+            ->where('user_type_id', '=', Consts::USER_TYPE_REAL_STATE)
             ->leftJoin('real_states', 'users.id', '=', 'real_states.user_id')
             ?->first();
 
-        $this->name = $this->realState->name;
-        $this->email = $this->realState->email;
-        $this->phone = $this->realState->phone;
-        $this->city = $this->realState->city;
-        $this->state = $this->realState->state;
-        $this->zipCode = $this->realState->zipCode;
-        $this->neighborhood = $this->realState->neighborhood;
-        $this->street = $this->realState->street;
-        $this->number = $this->realState->number;
-        $this->complement = $this->realState->complement;
-        $this->document = $this->realState->document;
-        $this->value_base = $this->realState->value_base;
-        $this->first_release = $this->realState->first_release;
-        $this->recurrent_release = $this->realState->recurrent_release;
-        $this->entrance_fees = $this->realState->entrance_fees;
-        $this->exit_fees = $this->realState->exit_fees;
-        $this->daily_interest = $this->realState->daily_interest;
-        $this->monthly_interest = $this->realState->monthly_interest;
+        $this->name = $this->user->name;
+        $this->email = $this->user->email;
+        $this->phone = $this->user->phone;
+        $this->city = $this->user->city;
+        $this->state = $this->user->state;
+        $this->zipCode = $this->user->zipCode;
+        $this->neighborhood = $this->user->neighborhood;
+        $this->street = $this->user->street;
+        $this->number = $this->user->number;
+        $this->complement = $this->user->complement;
+        $this->document = $this->user->document;
+        $this->value_base = $this->user->value_base;
+        $this->first_release = $this->user->first_release;
+        $this->recurrent_release = $this->user->recurrent_release;
+        $this->entrance_fees = $this->user->entrance_fees;
+        $this->exit_fees = $this->user->exit_fees;
+        $this->daily_interest = $this->user->daily_interest;
+        $this->monthly_interest = $this->user->monthly_interest;
+
     }
 
     public function getFormSchema()
     {
-        ds($this->value_base)->warning()->s('value base mutators');
         return [
             Wizard::make(
                 [
@@ -101,47 +104,10 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                     Step::make('Dados monetarios')
                         ->schema(
                             [
-//                                Select::make('real_state')
-//                                    ->label('Imobiliaria')
-//                                    ->options($this->realState->pluck('name', 'id'))
-////                                    ->searchable()
-//                                    ->required()
-//                                    ->columnSpanFull(),
 
                                 TextInput::make('value_base')
                                     ->prefix('R$')
-                                    ->label('Valor base')
-                                    ->placeholder('Valor base')
-////                                    ->regex('/^(\d{1,3}(\.\d{3})*|\d+)(\,\d{2})?$/gm')
-////                                    ->mask(fn (TextInput\Mask $mask) => $mask->pattern('\d+(?:\.\d{3})*?,\d{2}'))
-////                                    ->mask(fn (
-////                                        TextInput\Mask $mask) => $mask->money(prefix: 'R$ ', thousandsSeparator: '.')
-////                                        ->decimalSeparator(',')
-////                                    )
-                                    ->default($this->value_base)
-//                                    ->mask(fn(TextInput\Mask $mask) => $mask
-//                                        ->patternBlocks([
-//                                            'money' => fn(Mask $mask) => $mask->decimalPlaces(2)
-//                                                ->numeric()
-//                                                ->to($this->value_base)
-//                                                ->decimalSeparator(',')
-////                                                ->thousandsSeparator('.')
-//                                            ,
-//
-//                                        ])
-//                                        ->pattern('R$ money')
-//                                    )
-//                                    ->mask(fn (TextInput\Mask $mask) => $mask
-//                                        ->decimalPlaces(2) // Set the number of digits after the decimal point.
-//                                        ->decimalSeparator(',') // Add a separator for decimal numbers.
-//                                        ->mapToDecimalSeparator([',']) // Map additional characters to the decimal separator.
-//                                        ->thousandsSeparator('.')
-//                                        ->numeric() // Add a separator for thousands.
-//                                    )
-                                    ->numeric()
-                                    ->minValue(0)
-                                    ->required()
-                                    ->columnSpanFull(),
+                                    ->label('Valor base'),
 
                                 TextInput::make('first_release')
                                     ->label('Primeiro aluguel')
@@ -149,12 +115,11 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                                         ->patternBlocks([
                                             'value' => fn(Mask $mask) => $mask->numeric()
                                                 ->to($this->first_release),
-
                                         ])
-                                        ->pattern('value %')
+                                        ->pattern('% value')
                                     )
                                     ->required()
-                                    ->helperText('Valor em porcentagem')
+                                    ->helperText(Consts::TEXTHELPVALUEPORCENTAGE)
                                     ->minValue(0),
 
                                 TextInput::make('recurrent_release')
@@ -165,9 +130,9 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                                                 ->to($this->recurrent_release),
 
                                         ])
-                                        ->pattern('value %')
+                                        ->pattern('% value')
                                     )
-                                    ->helperText('Valor em porcentagem')
+                                    ->helperText(Consts::TEXTHELPVALUEPORCENTAGE)
                                     ->minValue(0)
                                     ->required(),
 
@@ -179,9 +144,9 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                                                 ->to($this->entrance_fees),
 
                                         ])
-                                        ->pattern('value %')
+                                        ->pattern('% value')
                                     )
-                                    ->helperText('Valor em porcentagem')
+                                    ->helperText(Consts::TEXTHELPVALUEPORCENTAGE)
                                     ->minValue(0)
                                     ->required(),
 
@@ -193,9 +158,9 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                                                 ->to($this->exit_fees),
 
                                         ])
-                                        ->pattern('value %')
+                                        ->pattern('% value')
                                     )
-                                    ->helperText('Valor em porcentagem')
+                                    ->helperText(Consts::TEXTHELPVALUEPORCENTAGE)
                                     ->minValue(0)
                                     ->required(),
 
@@ -207,9 +172,9 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                                                 ->to($this->daily_interest),
 
                                         ])
-                                        ->pattern('value %')
+                                        ->pattern('% value')
                                     )
-                                    ->helperText('Valor em porcentagem')
+                                    ->helperText(Consts::TEXTHELPVALUEPORCENTAGE)
                                     ->minValue(0)
                                     ->required(),
 
@@ -221,9 +186,10 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                                                 ->to($this->monthly_interest),
 
                                         ])
-                                        ->pattern('value %')
+                                        ->pattern('% value')
                                     )
-                                    ->helperText('Valor em porcentagem')
+                                    ->default($this->monthly_interest)
+                                    ->helperText(Consts::TEXTHELPVALUEPORCENTAGE)
                                     ->minValue(0)
                                     ->required(),
                             ]
@@ -241,8 +207,6 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
     public function update()
     {
         $this->data = $this->form->getState();
-
-        ds($this->data)->warning()->die();
     }
 
     public function render()

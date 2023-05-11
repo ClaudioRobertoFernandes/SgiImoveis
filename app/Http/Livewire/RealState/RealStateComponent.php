@@ -69,7 +69,6 @@ class RealStateComponent extends Component implements Tables\Contracts\HasTable
                                 TextInput::make('value_base')
                                     ->prefix('R$')
                                     ->label('Valor base')
-                                    ->placeholder('Valor base')
                                     ->numeric()
                                     ->minValue(0)
                                     ->required()
@@ -127,7 +126,7 @@ class RealStateComponent extends Component implements Tables\Contracts\HasTable
                 ]
             )->columns(2)
                 ->submitAction(new HtmlString(view('livewire.register.register-component-submit')))
-                ->extraAttributes(['class' => 'dark:text-white'])
+                ->extraAttributes(['class' => Consts::DARKTEXTWHITE])
         ];
     }
 
@@ -158,7 +157,8 @@ class RealStateComponent extends Component implements Tables\Contracts\HasTable
     protected function getTableQuery(): Builder
     {
         return User::query()
-            ->where('user_type_id', Consts::USER_TYPE_REAL_STATE);
+            ->where('user_type_id', Consts::USER_TYPE_REAL_STATE)
+            ->leftjoin('real_states', 'real_states.user_id', '=', 'users.id');
     }
 
     protected function getTableColumns(): array
@@ -208,10 +208,6 @@ class RealStateComponent extends Component implements Tables\Contracts\HasTable
         ];
     }
 
-    protected function getTableBulkActions(): array
-    {
-        return [];
-    }
 
     public function render(): View|Application|Factory
     {
