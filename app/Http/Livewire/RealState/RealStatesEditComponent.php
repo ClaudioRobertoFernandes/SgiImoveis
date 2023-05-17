@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\RealState;
 
 use App\Helpers\Consts;
+use App\Models\Accouting\Accoutting;
 use App\Models\RealStates\RealStates;
 use App\Models\User;
 use Filament\Forms;
@@ -19,6 +20,8 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
     use Forms\Concerns\InteractsWithForms;
 
     public $realStates;
+    public $accouting;
+    public $price;
     public $user;
     public $data;
     public string $name;
@@ -48,6 +51,9 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
             ->leftJoin('real_states', 'users.id', '=', 'real_states.user_id')
             ?->first();
 
+        $this->accouting = Accoutting::all()->first();
+        ds($this->accouting)->s('teste de getAttribute')->warning();
+
         $this->name = $this->user->name;
         $this->email = $this->user->email;
         $this->phone = $this->user->phone;
@@ -59,7 +65,8 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
         $this->number = $this->user->number;
         $this->complement = $this->user->complement;
         $this->document = $this->user->document;
-        $this->value_base = $this->user->value_base;
+//        $this->value_base = $this->user->value_base;
+        $this->price = $this->accouting->price;
         $this->first_release = $this->user->first_release;
         $this->recurrent_release = $this->user->recurrent_release;
         $this->entrance_fees = $this->user->entrance_fees;
@@ -105,18 +112,16 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                         ->schema(
                             [
 
-                                TextInput::make('value_base')
-                                    ->prefix('R$')
-                                    ->label('Valor base'),
+                                TextInput::make('price')
+                                    ->mask(fn(TextInput\Mask $mask) => $mask
+                                        ->money('R$ ',',',2)
+                                    )
+                                    ->label('Preço'),
 
                                 TextInput::make('first_release')
                                     ->label('Primeiro aluguel')
                                     ->mask(fn(TextInput\Mask $mask) => $mask
-                                        ->patternBlocks([
-                                            'value' => fn(Mask $mask) => $mask->numeric()
-                                                ->to($this->first_release),
-                                        ])
-                                        ->pattern('% value')
+                                        ->money('R$ ','.',2)
                                     )
                                     ->required()
                                     ->helperText(Consts::TEXTHELPVALUEPORCENTAGE)
@@ -128,7 +133,6 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                                         ->patternBlocks([
                                             'value' => fn(Mask $mask) => $mask->numeric()
                                                 ->to($this->recurrent_release),
-
                                         ])
                                         ->pattern('% value')
                                     )
@@ -142,7 +146,6 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                                         ->patternBlocks([
                                             'value' => fn(Mask $mask) => $mask->numeric()
                                                 ->to($this->entrance_fees),
-
                                         ])
                                         ->pattern('% value')
                                     )
@@ -156,7 +159,6 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                                         ->patternBlocks([
                                             'value' => fn(Mask $mask) => $mask->numeric()
                                                 ->to($this->exit_fees),
-
                                         ])
                                         ->pattern('% value')
                                     )
@@ -170,7 +172,6 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                                         ->patternBlocks([
                                             'value' => fn(Mask $mask) => $mask->numeric()
                                                 ->to($this->daily_interest),
-
                                         ])
                                         ->pattern('% value')
                                     )
@@ -184,7 +185,6 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                                         ->patternBlocks([
                                             'value' => fn(Mask $mask) => $mask->numeric()
                                                 ->to($this->monthly_interest),
-
                                         ])
                                         ->pattern('% value')
                                     )
