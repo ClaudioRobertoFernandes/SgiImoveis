@@ -2,14 +2,17 @@
 
 namespace App\Models\RealStates;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class RealStates extends Model
 {
     use HasFactory;
 
+    protected $table = 'real_states';
     protected $fillable = [
         'user_id',
         'first_release',
@@ -21,25 +24,33 @@ class RealStates extends Model
         'monthly_interest',
     ];
 
-    protected $appends = [
-//        'valor',
-    ];
-
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-    protected function getValueBaseAttribute($value): float|int
+    public function user(): hasOne
     {
-        return $this->attributes['value_base'] = sprintf('R$ %s', number_format($value, 2));
+        return $this->hasOne(User::class);
     }
 
+    public function getValueBaseAttribute($value): float|int
+    {
+//        $this->attributes['value_base'] = number_format($value / 100, 2, ',', '.');
+        $this->attributes['value_base'] = $value / 100;
+        return $this->attributes['value_base'];
+    }
 
-    protected function valueBase(): Attribute
+    protected function entranceFees(): Attribute
     {
         return Attribute::make(
-            get: static fn (string $value) => 'Meu nome: ' . strtoupper($value) . ' e tenho '. 35 . ' anos.',
+            get: static fn(int $value) => $value / 100,
+            set: static fn(int $value) => $value *100,
         );
+    }
+
+    public function getEntranceFeesAttribute($value): float|int
+    {
+        return $this->attributes['entrance_fees'] = $value;
     }
 }

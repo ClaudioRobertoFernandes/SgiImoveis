@@ -39,4 +39,7 @@ class Consts
      * this is ACCOUNTING
      */
     public const USER_TYPE_ACCOUNTING = 6;
+
+    public const DARKTEXTWHITE = 'dark:text-white';
+    public const TEXTHELPVALUEPORCENTAGE = 'Valor em porcentagem';
 }

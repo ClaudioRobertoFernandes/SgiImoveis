@@ -147,7 +147,7 @@ class AccountingComponent extends Component implements Tables\Contracts\HasTable
                 ]
             )
             ->columns(6)
-            ->extraAttributes(['class' => 'dark:text-white'])
+            ->extraAttributes(['class' => Consts::DARKTEXTWHITE])
             ->submitAction(new HtmlString(view('livewire.accountings.accounting-register-component-submit')))
         ];
     }
@@ -155,7 +155,7 @@ class AccountingComponent extends Component implements Tables\Contracts\HasTable
     public function submit()
     {
         $this->data = $this->form->getState();
-        ds($this->data)->s('data')->warning();
+
         $accounting = new User();
         $accounting->name = $this->name;
         $accounting->user_type_id = Consts::USER_TYPE_ACCOUNTING;
@@ -233,10 +233,6 @@ class AccountingComponent extends Component implements Tables\Contracts\HasTable
         ];
     }
 
-    protected function getTableBulkActions(): array
-    {
-        return [];
-    }
 
     public function render(): View
     {
