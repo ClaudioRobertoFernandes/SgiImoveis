@@ -3,8 +3,8 @@
 namespace App\Http\Livewire\RealState;
 
 use App\Helpers\Consts;
+use App\Helpers\MoneyFormater;
 use App\Models\Accouting\Accoutting;
-use App\Models\RealStates\RealStates;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
@@ -12,6 +12,7 @@ use Filament\Forms\Components\TextInput\Mask;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
 use Illuminate\Support\HtmlString;
+use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 use Livewire\Component;
 
 class RealStatesEditComponent extends Component implements Forms\Contracts\HasForms
@@ -24,6 +25,7 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
     public $price;
     public $user;
     public $data;
+    public string $userId;
     public string $name;
     public string $email;
     public string $phone;
@@ -52,8 +54,8 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
             ?->first();
 
         $this->accouting = Accoutting::all()->first();
-        ds($this->accouting)->s('teste de getAttribute')->warning();
 
+        $this->userId = $this->user->user_id;
         $this->name = $this->user->name;
         $this->email = $this->user->email;
         $this->phone = $this->user->phone;
@@ -65,8 +67,7 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
         $this->number = $this->user->number;
         $this->complement = $this->user->complement;
         $this->document = $this->user->document;
-//        $this->value_base = $this->user->value_base;
-        $this->price = $this->accouting->price;
+        $this->value_base = MoneyFormater::getMoneyValue($this->user->value_base);
         $this->first_release = $this->user->first_release;
         $this->recurrent_release = $this->user->recurrent_release;
         $this->entrance_fees = $this->user->entrance_fees;
@@ -106,88 +107,64 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                                     ->default($this->number),
                                 TextInput::make('complement')
                                     ->default($this->complement),
+                                TextInput::make('userId')
+                                    ->default($this->userId)
+                                    ->hidden(),
                             ]
                         ),
                     Step::make('Dados monetarios')
                         ->schema(
                             [
-
-                                TextInput::make('price')
-                                    ->mask(fn(TextInput\Mask $mask) => $mask
-                                        ->money('R$ ',',',2)
-                                    )
-                                    ->label('Preço'),
+                                PtbrMoney::make('value_base')
+                                    ->label('Valor base')
+                                    ->minValue(0)
+                                    ->required()
+                                    ->columnSpanFull(),
 
                                 TextInput::make('first_release')
                                     ->label('Primeiro aluguel')
-                                    ->mask(fn(TextInput\Mask $mask) => $mask
-                                        ->money('R$ ','.',2)
-                                    )
+                                    ->default($this->first_release)
+                                    ->suffix('%')
                                     ->required()
                                     ->helperText(Consts::TEXTHELPVALUEPORCENTAGE)
                                     ->minValue(0),
 
                                 TextInput::make('recurrent_release')
                                     ->label('Aluguel recorrente')
-                                    ->mask(fn(TextInput\Mask $mask) => $mask
-                                        ->patternBlocks([
-                                            'value' => fn(Mask $mask) => $mask->numeric()
-                                                ->to($this->recurrent_release),
-                                        ])
-                                        ->pattern('% value')
-                                    )
+                                    ->default($this->recurrent_release)
+                                    ->suffix('%')
                                     ->helperText(Consts::TEXTHELPVALUEPORCENTAGE)
                                     ->minValue(0)
                                     ->required(),
 
                                 TextInput::make('entrance_fees')
                                     ->label('Taxa de entrada')
-                                    ->mask(fn(TextInput\Mask $mask) => $mask
-                                        ->patternBlocks([
-                                            'value' => fn(Mask $mask) => $mask->numeric()
-                                                ->to($this->entrance_fees),
-                                        ])
-                                        ->pattern('% value')
-                                    )
+                                    ->default($this->entrance_fees)
+                                    ->suffix('%')
                                     ->helperText(Consts::TEXTHELPVALUEPORCENTAGE)
                                     ->minValue(0)
                                     ->required(),
 
                                 TextInput::make('exit_fees')
                                     ->label('Taxa de saida')
-                                    ->mask(fn(TextInput\Mask $mask) => $mask
-                                        ->patternBlocks([
-                                            'value' => fn(Mask $mask) => $mask->numeric()
-                                                ->to($this->exit_fees),
-                                        ])
-                                        ->pattern('% value')
-                                    )
+                                    ->default($this->exit_fees)
+                                    ->suffix('%')
                                     ->helperText(Consts::TEXTHELPVALUEPORCENTAGE)
                                     ->minValue(0)
                                     ->required(),
 
                                 TextInput::make('daily_interest')
                                     ->label('Juros diario')
-                                    ->mask(fn(TextInput\Mask $mask) => $mask
-                                        ->patternBlocks([
-                                            'value' => fn(Mask $mask) => $mask->numeric()
-                                                ->to($this->daily_interest),
-                                        ])
-                                        ->pattern('% value')
-                                    )
+                                    ->suffix('%')
+                                    ->default($this->daily_interest)
                                     ->helperText(Consts::TEXTHELPVALUEPORCENTAGE)
                                     ->minValue(0)
                                     ->required(),
 
                                 TextInput::make('monthly_interest')
                                     ->label('Juros mensal')
-                                    ->mask(fn(TextInput\Mask $mask) => $mask
-                                        ->patternBlocks([
-                                            'value' => fn(Mask $mask) => $mask->numeric()
-                                                ->to($this->monthly_interest),
-                                        ])
-                                        ->pattern('% value')
-                                    )
+                                    ->suffix('%')
+                                    ->default($this->monthly_interest)
                                     ->default($this->monthly_interest)
                                     ->helperText(Consts::TEXTHELPVALUEPORCENTAGE)
                                     ->minValue(0)
@@ -197,9 +174,7 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
                 ],
             )->columns(2)
                 ->submitAction(new HtmlString(view('livewire.real-state.real-state-edit-component-submit')))
-                ->extraAttributes(['class' => 'dark:text-white'])
-                ->startOnStep(2)
-            ,
+                ->extraAttributes(['class' => 'dark:text-white']),
         ];
 
     }
@@ -207,6 +182,8 @@ class RealStatesEditComponent extends Component implements Forms\Contracts\HasFo
     public function update()
     {
         $this->data = $this->form->getState();
+        ds($this->data);
+
     }
 
     public function render()

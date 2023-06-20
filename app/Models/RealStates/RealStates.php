@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class RealStates extends Model
@@ -37,15 +36,16 @@ class RealStates extends Model
 
     public function getValueBaseAttribute($value): float|int
     {
-        $this->attributes['value_base'] = number_format($value / 100, 2, ',', '.');
+//        $this->attributes['value_base'] = number_format($value / 100, 2, ',', '.');
+        $this->attributes['value_base'] = $value / 100;
         return $this->attributes['value_base'];
     }
 
     protected function entranceFees(): Attribute
     {
         return Attribute::make(
-            get: static fn(int $value) => $value,
-            set: static fn(int $value) => $value,
+            get: static fn(int $value) => $value / 100,
+            set: static fn(int $value) => $value *100,
         );
     }
 

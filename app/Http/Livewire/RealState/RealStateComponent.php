@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\RealState;
 
+use Exception;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
@@ -22,7 +23,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Tables\Columns\CheckboxColumn;
-
+use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 class RealStateComponent extends Component implements Tables\Contracts\HasTable
 {
 
@@ -51,6 +52,7 @@ class RealStateComponent extends Component implements Tables\Contracts\HasTable
 
 
 
+
     protected function getFormSchema(): array
     {
         return [
@@ -66,10 +68,8 @@ class RealStateComponent extends Component implements Tables\Contracts\HasTable
                                     ->required()
                                     ->columnSpanFull(),
 
-                                TextInput::make('value_base')
-                                    ->prefix('R$')
+                                PtbrMoney::make('value_base')
                                     ->label('Valor base')
-                                    ->numeric()
                                     ->minValue(0)
                                     ->required()
                                     ->columnSpanFull(),
